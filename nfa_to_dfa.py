@@ -15,21 +15,28 @@
 from collections import deque
 
 
-input = {1: {2, 3}, 
+nfa = {1: {2, 3}, 
         2: "empty",
         3: {4},
         4: "empty"}
 
-output = {}
+dfa = {}
 
-for key, values in input.items():
-    node_set = {key}
-    if input[key] != "empty":
+for key in nfa.keys():
+    dfa[key] = {key}
+
+    if nfa[key] != "empty":
         nodes = deque()
-        nodes.append(input[key])
+        nodes.append(nfa[key])
+
         while nodes:
             node = nodes.popleft()
-            if node not in node_set and node != "empty": 
-                node_set.add(input[node])
-                nodes.append(node)
-    output[key] = node_set
+
+            # Conversion happens here
+            if node not in dfa[key] and node != "empty": 
+                dfa[key].update(node)
+                
+                for i in node:
+                    nodes.append(nfa[i])
+
+print(dfa)
