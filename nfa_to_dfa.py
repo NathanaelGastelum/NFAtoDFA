@@ -55,7 +55,7 @@ def nfa_to_dfa(nfa):
 
 
 def print_output(nfa):
-    print(sorted(get_powerset(nfa), key=len))
+    print("State set of the equivalent DFA = ", str(sorted(get_powerset(nfa), key=len)).replace('[', '{').replace(']', "}"))
 
     for key, values in nfa_to_dfa(nfa).items():
         print(f"E({key}) = {values}")
