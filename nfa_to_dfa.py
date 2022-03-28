@@ -1,25 +1,21 @@
-# Input: 
-# 1,{2, 3}
-# 2,empty
-# 3,{4}
-# 4,empty
-
-# Output:
-# State set of the equivalent DFA = {empty, {1}, {2}, {3}, {4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}, {1, 2,
-# 3}, {1, 2, 4}, {1, 3, 4}, {2, 3, 4}, {1, 2, 3, 4}}
-# E(1) = {1,2,3,4}
-# E(2) = {2}
-# E(3) = {3,4}
-# E(4) = {4}
-
 from collections import deque
-from platform import node
+import argparse
 
-# TODO: read input from file 
-nfa = {1: {2, 3}, 
-        2: "empty",
-        3: {4},
-        4: "empty"}
+parser = argparse.ArgumentParser()
+parser.add_argument("input_file")
+args = parser.parse_args()
+
+def get_input():
+    nfa = {}
+    with open(args.input_file) as file:
+        for line in file:
+            line = line.split(",", maxsplit=1)
+            if line[1].strip() == "empty":
+                nfa[int(line[0])] = "empty"
+            else:
+                nfa[int(line[0])] = {int(x) for x in line[1] if x.isdigit()}
+
+    return nfa
 
 
 def get_powerset(nfa):
@@ -64,4 +60,4 @@ def print_output(nfa):
     for key, values in nfa_to_dfa(nfa).items():
         print(f"E({key}) = {values}")
 
-print_output(nfa)
+print_output(get_input())
